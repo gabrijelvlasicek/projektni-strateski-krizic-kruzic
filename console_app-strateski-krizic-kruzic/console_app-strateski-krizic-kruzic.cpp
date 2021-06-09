@@ -3,7 +3,16 @@
 #include <stdlib.h>
 #include <cmath>
 #include <fstream>
+
 using namespace std;
+
+void saveGame(char& y, int& x) {
+    ofstream save;
+    save.open("game_save.txt", ios::binary);
+    save.put(y);
+    save.write((char*)&x, sizeof(x));
+    save.close();
+}
 
 int grupa(int, int);
 int podgrupa(int, char);
@@ -20,11 +29,11 @@ int main()
     while (1)
     {
         system("cls");
-        cout << endl << endl << "|===========DOBRODOSLI U STRATESKI KRIZIC KRUZIC==========|" << endl << endl;
+        cout << endl << endl << "|===========DOBRODOSLI U STRATESKI KRIZIC-KRUZIC==========|" << endl << endl;
         cout << "--> 1. POKRENI IGRU" << endl;
-        cout << "--> 1. SPREMI IGRU" << endl;
-        cout << "--> 2. UCITAJ IGRU" << endl;
-        cout << "--> 3. IZLAZ IZ IGRE" << endl;
+        cout << "--> 2. SPREMI IGRU" << endl;
+        cout << "--> 3. UCITAJ IGRU" << endl;
+        cout << "--> 4. IZLAZ IZ IGRE" << endl;
         cout << "--> ODABIR: ";
         cin >> izbor;
         if (izbor == 1)
@@ -104,6 +113,10 @@ int main()
                     cout << "Igrac " << igrac << " unos mjesta:" << endl;
                     //printf("Igrac %c unos mjesta:\n", igrac);
                     cin >> y >> x;
+                    if (y == 's' && x == 1) {
+                        saveGame(y, x);
+                        break;
+                    }
                     y1 = y - 97;
                     x1 = x - 1;
                     gr = grupa(x, y);
