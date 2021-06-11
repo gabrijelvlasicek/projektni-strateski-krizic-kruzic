@@ -1,1 +1,3 @@
-﻿  console_app-strateski-krizic-kruzic.vcxproj -> C:\Users\vidov\Documents\GitHub\projektni-strateski-krizic-kruzic\console_app-strateski-krizic-kruzic\Debug\console_app-strateski-krizic-kruzic.exe
+﻿  console_app-strateski-krizic-kruzic.cpp
+C:\Users\vidov\Documents\GitHub\projektni-strateski-krizic-kruzic\console_app-strateski-krizic-kruzic\console_app-strateski-krizic-kruzic.cpp(23,12): warning C4101: 'Y': unreferenced local variable
+  console_app-strateski-krizic-kruzic.vcxproj -> C:\Users\vidov\Documents\GitHub\projektni-strateski-krizic-kruzic\console_app-strateski-krizic-kruzic\Debug\console_app-strateski-krizic-kruzic.exe
