@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <cmath>
@@ -6,13 +6,13 @@
 
 using namespace std;
 
-//void saveGame(char& y, int& x) {
-//    ofstream save;
-//    save.open("game_save.txt", ios::binary);
-//    save.put(y);
-//    save.write((char*)&x, sizeof(x));
-//    save.close();
-//}
+void saveGame(char& y, int& x) {
+    ofstream save;
+    save.open("game_save.txt", ios::binary);
+    save.put(y);
+    save.write((char*)&x, sizeof(x));
+    save.close();
+}
 
 int grupa(int, int);
 int podgrupa(int, char);
@@ -21,7 +21,6 @@ int main()
 {
 
     int x, Y;
-    int brojac = 0;
     char y, igrac = 'X';
     char polje[9][9];
     int straneSvijeta[9][9];
@@ -30,23 +29,12 @@ int main()
     while (1)
     {
         system("cls");
-        cout << " ===============================================================";
-        cout << endl << "|-----------> DOBRODOSLI U STRATESKI KRIZIC-KRUZIC <------------|" << endl;
-        cout << " ===============================================================" << endl;
-        cout << "|                                                               |" << endl;
-        cout << " ===============================================================" << endl;
-        cout << " ===============================================================" << endl;
-        cout << "|                                                               |" << endl;
-        cout << "|                                                               |" << endl;
-        cout << "|                  ==> 1. POKRENI IGRU  <==                     |" << endl;
-        cout << "|                  ==> 2. SPREMI IGRU   <==                     |" << endl;
-        cout << "|                  ==> 3. UCITAJ IGRU   <==                     |" << endl;
-        cout << "|                  ==> 4. IZLAZ IZ IGRE <==                     |" << endl;
-        cout << "|                                                               |" << endl;
-        cout << "|                                                               |" << endl;
-        cout << " ===============================================================" << endl;
-        cout << " ===============================================================" << endl << endl;
-        cout << "                   ==> ODABIR:" << "\t";
+        cout << endl << endl << "|===========DOBRODOSLI U STRATESKI KRIZIC-KRUZIC==========|" << endl << endl;
+        cout << "--> 1. POKRENI IGRU" << endl;
+        cout << "--> 2. SPREMI IGRU" << endl;
+        cout << "--> 3. UCITAJ IGRU" << endl;
+        cout << "--> 4. IZLAZ IZ IGRE" << endl;
+        cout << "--> ODABIR: ";
         cin >> izbor;
         if (izbor == 1)
         {
@@ -125,21 +113,10 @@ int main()
                     cout << "Igrac " << igrac << " unos mjesta:" << endl;
                     //printf("Igrac %c unos mjesta:\n", igrac);
                     cin >> y >> x;
-                    brojac++;
-                    /*if (y == 's' && x == 1) {
+                    if (y == 's') {
                         saveGame(y, x);
                         break;
-                    }*/
-                    ofstream save;
-                    save.open("spremanje.txt", ios::app);   
-                    for (int i = 0; i < brojac; i++)
-                    {
-                        save.put(y);
-                        save.write((char*)&x, sizeof(x));
                     }
-                    save.close();
-                    
-
                     y1 = y - 97;
                     x1 = x - 1;
                     gr = grupa(x, y);
@@ -174,12 +151,8 @@ int main()
         }
         else if (izbor == 3)
         {
-         
-        }
-        else if (izbor == 4)
-        {
-        cout << "DOVIDJENJA!";
-        break;
+            cout << "DOVIDJENJA!";
+            break;
         }
         else
         {
