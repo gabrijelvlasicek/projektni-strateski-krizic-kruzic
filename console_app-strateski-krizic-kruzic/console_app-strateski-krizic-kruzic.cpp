@@ -1,190 +1,205 @@
 #include <iostream>
+#include <string>
 #include <stdio.h>
 #include <stdlib.h>
 #include <cmath>
 #include <fstream>
 
 using namespace std;
+void create_if_null(const char* path)
+{
+    fstream data;
+    data.open(path);
+    if (!data)
+    {
+        data.close();
+        data.open(path, ios::app);
+    }
+    data.close();
+}
 
-//void saveGame(char& y, int& x) {
-//    ofstream save;
-//    save.open("game_save.txt", ios::binary);
-//    save.put(y);
-//    save.write((char*)&x, sizeof(x));
-//    save.close();
-//}
+void saveGame(char igrac, int gr, int pgr, char stanje[9][9])
+{
+    ofstream datoteka;
+    datoteka.open("Spremanje.txt", ios::binary);
+    datoteka << igrac << endl;
+    datoteka << gr << endl;
+    datoteka << pgr << endl;
+    datoteka.write((char*)stanje, 81);
+    datoteka.close();
+}
+
+void loadGame(char& igrac, int& gr, int& pgr, char* stanje)
+{
+    ifstream datoteka;
+    datoteka.open("Spremanje.txt", ios::binary);
+    datoteka >> igrac >> gr >> pgr;
+    datoteka.ignore();
+    datoteka.read((char*)stanje, 81);
+    datoteka.close();
+}
 
 int grupa(int, int);
 int podgrupa(int, char);
 
+int x, Y;
+char y, igrac = 'X';
+char polje[9][9];
+int straneSvijeta[9][9];
+int izbor;
+int gr, pgr = 0;
+
+void pokreniIgru();
+
 int main()
 {
-
-    int x, Y;
-    int brojac = 0;
-    char y, igrac = 'X';
-    char polje[9][9];
-    int straneSvijeta[9][9];
-    int izbor;
-    //==================================================================================================================================================
-    while (1)
+    create_if_null("Spremanje.txt");
+    //NACRT PLOCE
+    for (int i = 0; i < 9; i++)
     {
-        system("cls");
-        cout << " ===============================================================";
-        cout << endl  << "|-----------> DOBRODOSLI U STRATESKI KRIZIC-KRUZIC <------------|" << endl;
-        cout << " ===============================================================" << endl;
-        cout << "|                                                               |" << endl;
-        cout << " ===============================================================" << endl;
-        cout << " ===============================================================" << endl;
-        cout << "|                                                               |" << endl;
-        cout << "|                                                               |" << endl;
-        cout << "|                  ==> 1. POKRENI IGRU  <==                     |" << endl;
-        cout << "|                  ==> 2. SPREMI IGRU   <==                     |"<< endl;
-        cout << "|                  ==> 3. UCITAJ IGRU   <==                     |" << endl;
-        cout << "|                  ==> 4. IZLAZ IZ IGRE <==                     |" << endl;
-        cout << "|                                                               |" << endl;
-        cout << "|                                                               |" << endl;
-        cout << " ==============================================================="<< endl;
-        cout << " ===============================================================" << endl << endl;
-        cout << "                   ==> ODABIR:" << "\t";
-        cin >> izbor;
-        if (izbor == 1)
+        for (int j = 0; j < 9; j++)
         {
-            //NACRT PLOCE
-            for (int i = 0; i < 9; i++)
+            polje[i][j] = j + 49;
+        }
+    }
+    int j = 0;
+    int h;
+    for (int y = 0; y < 9; y++)
+    {
+        while (j < 9)
+        {
+            if (y == 0 || y == 3 || y == 6)
             {
-                for (int j = 0; j < 9; j++)
-                {
-                    polje[i][j] = j + 49;
-                }
+                h = 1;
             }
-            int j = 0;
-            int h;
-            for (int y = 0; y < 9; y++)
+            else if (y == 1 || y == 4 || y == 7)
             {
-                while (j < 9)
-                {
-                    if (y == 0 || y == 3 || y == 6)
-                    {
-                        h = 1;
-                    }
-                    else if (y == 1 || y == 4 || y == 7)
-                    {
-                        h = 4;
-                    }
-                    else if (y == 2 || y == 5 || y == 8)
-                    {
-                        h = 7;
-                    }
-                    for (int i = 0; i < 3; i++)
-                    {
-                        straneSvijeta[y][j] = h;
-                        h++;
-                        j++;
-                    }
-                }
-                j = 0;
+                h = 4;
             }
-            int y1, x1;
-            int gr, pgr = 0;
-
-            for (int potez = 0; potez < 80; potez++)
+            else if (y == 2 || y == 5 || y == 8)
             {
-                system("@cls||clear");
-                for (int i = 0; i < 9; i++)
+                h = 7;
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                straneSvijeta[y][j] = h;
+                h++;
+                j++;
+            }
+        }
+        j = 0;
+    }
+    system("@cls||clear");
+    cout << " ===============================================================";
+    cout << endl << "|-----------> DOBRODOSLI U STRATESKI KRIZIC-KRUZIC <------------|" << endl;
+    cout << " ===============================================================" << endl;
+    cout << "|                                                               |" << endl;
+    cout << " ===============================================================" << endl;
+    cout << " ===============================================================" << endl;
+    cout << "|                                                               |" << endl;
+    cout << "|                                                               |" << endl;
+    cout << "|                  ==> 1. POKRENI IGRU  <==                     |" << endl;
+    cout << "|                  ==> 2. UCITAJ IGRU   <==                     |" << endl;
+    cout << "|                  ==> 3. IZLAZ IZ IGRE <==                     |" << endl;
+    cout << "|                                                               |" << endl;
+    cout << "|                                                               |" << endl;
+    cout << " ===============================================================" << endl;
+    cout << " ===============================================================" << endl << endl;
+    cout << "                   ==> ODABIR:" << "\t";
+    cin >> izbor;
+    if (izbor == 1)
+    {
+        pokreniIgru();
+    }
+    else if (izbor == 2)
+    {
+        char* loadPolje = new char[82];
+        loadGame(igrac, gr, pgr, loadPolje);
+        for (int i = 0; i < 81; i++) polje[i / 9][i % 9] = loadPolje[i];
+        pokreniIgru();
+    }
+    else if (izbor == 3)
+    {
+        cout << "DOVIDJENJA!";
+    }
+    else
+    {
+        cout << "-->KRIVI UNOS!" << endl;
+    }
+    return 0;
+}
+
+void pokreniIgru()
+{
+    for (int potez = 0; potez < 80; potez++)
+    {
+        system("@cls||clear");
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < 9; j++)
+            {
+                char temp = 'a' + i;
+                if (polje[i][j] == 'X' || polje[i][j] == 'O')
                 {
-                    for (int j = 0; j < 9; j++)
-                    {
-                        char temp = 'a' + i;
-                        if (polje[i][j] == 'X' || polje[i][j] == 'O')
-                        {
-                            temp = ' ';
-                        }
-                        if (j == 2 || j == 5)
-                        {
-                            cout << temp << polje[i][j] << "   |   ";
-                            //printf(" %c%c |", temp, polje[i][j]);
-                        }
-                        else
-                        {
-                            cout << " " << temp << polje[i][j] << "  ";
-                            //printf(" %c%c ", temp, polje[i][j]);
-                        }
-                    }
-                    cout << endl << endl;
-                    if (i == 2 || i == 5)
-                    {
-                        cout << "------------------------------------------------------------" << endl << endl;
-                        //printf("--------------------------------------\n\n");
-                    }
-                    cout << endl;
+                    temp = ' ';
                 }
-
-                while (1)
+                if (j == 2 || j == 5)
                 {
-                    cout << "Igrac " << igrac << " unos mjesta:" << endl;
-                    //printf("Igrac %c unos mjesta:\n", igrac);
-                    cin >> y >> x;
-                    /*if (y == 's' && x == 1) {
-                        saveGame(y, x);
-                        break;
-                    }*/
-                    brojac++;
-                    ofstream save;                        
-                    save.open("game_save.txt", ios::binary);
-
-                    for (int i = 0; i < brojac; i++) {
-                        save.put(y);
-                        save.write((char*)&x, sizeof(x));
-                    }
-
-                    save.close();
-                  
-
-                    y1 = y - 97;
-                    x1 = x - 1;
-                    gr = grupa(x, y);
-
-                    if ((polje[(int)y - 97][x - 1] != 'X' && polje[(int)y - 97][x - 1] != 'O') && (pgr == gr || pgr == 0))
-                    {
-                        polje[(int)y - 97][x - 1] = igrac;
-                        pgr = podgrupa(x, y);
-                        break;
-                    }
-                    else
-                    {
-                        cout << "Igrac " << igrac << " ponovno unosi mjesto." << endl;
-                        //printf("Igrac %c ponovno unosi mjesto.\n", igrac);
-                    }
-                }
-
-
-                if (igrac == 'O')
-                {
-                    igrac = 'X';
+                    cout << temp << polje[i][j] << "   |   ";
                 }
                 else
                 {
-                    igrac = 'O';
+                    cout << " " << temp << polje[i][j] << "  ";
                 }
             }
+            cout << endl << endl;
+            if (i == 2 || i == 5)
+            {
+                cout << "------------------------------------------------------------" << endl << endl;
+            }
+            cout << endl;
         }
-        else if (izbor == 2)
-        {
 
-        }
-        else if (izbor == 3)
+        while (1)
         {
-            cout << "DOVIDJENJA!";
-            break;
+            cout << "Igrac " << igrac << " unos mjesta:" << endl;
+
+            string unos;
+            cin >> unos;
+
+            if (unos == "spremi") {
+                saveGame(igrac, gr, pgr, polje);
+                continue;
+            }
+            else {
+                y = unos[0];
+                x = unos[1] - '0';
+            }
+
+            gr = grupa(x, y);
+
+            if ((polje[(int)y - 97][x - 1] != 'X' && polje[(int)y - 97][x - 1] != 'O') && (pgr == gr || pgr == 0))
+            {
+                polje[(int)y - 97][x - 1] = igrac;
+                pgr = podgrupa(x, y);
+                break;
+            }
+            else
+            {
+                cout << "Igrac " << igrac << " ponovno unosi mjesto." << endl;
+            }
+        }
+
+
+        if (igrac == 'O')
+        {
+            igrac = 'X';
         }
         else
         {
-            cout << "-->KRIVI UNOS!" << endl;
+            igrac = 'O';
         }
     }
-    //==================================================================================================================================================
-    return 0;
 }
 
 
